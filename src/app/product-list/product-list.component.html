@@ -1,0 +1,15 @@
+<section class="product-list-container">
+  @if(isLoading){
+  <h1>Loading...</h1>
+  } @for (product of products; track product.bookId){
+  <app-product
+    [product]="product"
+    [id]="product.bookId"
+    (addItemEvent)="addOneProduct(product)"
+  />
+  <!-- (deleteMovieEvent)="deleteMovieP($event)"
+      (editMovieEvent)="editMovieP($event)" -->
+  }
+</section>
+
+<!-- <h1>{{ msg }}</h1> -->

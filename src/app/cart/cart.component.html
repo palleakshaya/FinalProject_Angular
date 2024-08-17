@@ -1,0 +1,22 @@
+<button (click)="placeOrder()" mat-button>
+  <span class="material-symbols-outlined"> Place order</span>
+</button>
+<div class="grand-total">
+  <h3>Grand Total: {{ grandTotal | currency }}</h3>
+</div>
+<div class="whole-page">
+  @for(cartItem of allItems ; track $index){
+  <div class="container">
+    <img src="{{ cartItem.imageURL }}" alt="" />
+    <div class="content">
+      <h3>{{ cartItem.title }}</h3>
+      <p>Quantity : {{ cartItem.stock }}</p>
+      <p>price : {{ cartItem.price | currency }}</p>
+      <p>total : {{ cartItem.stock * +cartItem.price | currency }}</p>
+      <button (click)="removeFromCart(cartItem)" mat-button>
+        <span class="material-symbols-outlined">Remove From Cart</span>
+      </button>
+    </div>
+  </div>
+  }
+</div>

@@ -1,0 +1,29 @@
+<mat-card class="wholecontainer">
+  <!-- <div class="container"> -->
+  <img src="{{ product.imageURL }}" alt="Extraordinary" class="product-image" />
+  <div class="info">
+    <h1>
+      {{ product.title }}
+    </h1>
+    <p class="author">{{ product.author }}</p>
+    <p class="price">
+      <span class="original-price"> {{ product.price }}</span>
+      <!-- <span class="discounted-price">229</span> -->
+    </p>
+    <!-- <p class="price">
+        {{ product.price | currency }}
+      </p> -->
+
+    <!-- <div class="info-add"> -->
+    <button
+      mat-icon-button
+      routerLink="/product/{{ product.bookId }}"
+      class="info"
+    >
+      <mat-icon>info</mat-icon>
+    </button>
+    <button mat-button (click)="addToCart()" class="addButton">➕Cart</button>
+    <!-- </div> -->
+    <!-- </div> -->
+  </div>
+</mat-card>
