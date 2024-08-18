@@ -10,9 +10,9 @@
     <img src="{{ cartItem.imageURL }}" alt="" />
     <div class="content">
       <h3>{{ cartItem.title }}</h3>
-      <p>Quantity : {{ cartItem.stock }}</p>
+      <p>Quantity : {{ cartItem.qty }}</p>
       <p>price : {{ cartItem.price | currency }}</p>
-      <p>total : {{ cartItem.stock * +cartItem.price | currency }}</p>
+      <p>total : {{ cartItem.qty * +cartItem.price | currency }}</p>
       <button (click)="removeFromCart(cartItem)" mat-button>
         <span class="material-symbols-outlined">Remove From Cart</span>
       </button>

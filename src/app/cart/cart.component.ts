@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { IBook, ProductService } from '../product.service';
 import { Router } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
+// import { CartService } from '../cart.service';
 
 @Component({
   selector: 'app-cart',
@@ -12,34 +13,56 @@ import { CurrencyPipe } from '@angular/common';
 })
 export class CartComponent {
   grandTotal: number = 0;
-  removeFromCart(item: IBook) {
-    this.productService.removeFromCart(item);
-    this.calculateGrandTotal(); // Recalculate grand total after removal
-  }
+  cartItems: IBook[] = [];
 
   @Input() allItems: Array<IBook> = [];
-  constructor(public productService: ProductService, private router: Router) {
+  constructor(
+    public productService: ProductService,
+    private router: Router // public cartService: CartService
+  ) {
     this.allItems = productService.cart;
     this.calculateGrandTotal();
+  }
+  ngOnInit(): void {
+    this.allItems = this.productService.gettingCart();
+    // this.cartService.cartItems$.subscribe((items) => {
+    //   this.cartItems = items;
+    // });
   }
 
   calculateGrandTotal() {
     this.grandTotal = this.allItems.reduce((total, item) => {
-      return total + item.price * item.stock;
+      return this.cartItems.reduce(
+        (total, item) => total + item.price * item.stock,
+        0
+      );
     }, 0);
   }
 
   total() {
     return;
   }
-
-  ngOnInit() {
-    this.loaditems();
+  removeFromCart(item: any) {
+    const idx = this.allItems.indexOf(item);
+    if (idx !== -1) {
+      this.allItems.splice(idx, 1);
+      this.productService.removeFromCart(item.id); // Ensure removal from service
+      this.calculateGrandTotal(); // Recalculate total after removing item
+    }
+    // return
+    // this.loaditems();
   }
-
   loaditems() {
     this.router.navigate(['cart']);
   }
+
+  // ngOnInit() {
+  //   this.loaditems();
+  // }
+
+  // loaditems() {
+  //   this.router.navigate(['cart']);
+  // }
 
   placeOrder() {
     if (!this.validateOrder()) {
@@ -84,5 +107,13 @@ export class CartComponent {
   id: number = 1;
   generateOrderId() {
     return (this.id += 1);
+  }
+  // deleteProduct() {
+  //   this.productService.removeFromCart(id);
+  //   this.allItems = this.productService.gettingCart();
+  //   this.calculateGrandTotal();
+  // }
+  orders() {
+    this.router.navigate([`orders`]);
   }
 }

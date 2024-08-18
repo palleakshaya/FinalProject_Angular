@@ -3,6 +3,7 @@ import { IBook } from '../product.service';
 import { ProductService } from '../product.service';
 import { Router } from '@angular/router';
 import { ProductComponent } from '../product/product.component';
+// import { CartService } from '../cart.service';
 
 @Component({
   selector: 'app-product-list',
@@ -13,13 +14,17 @@ import { ProductComponent } from '../product/product.component';
 })
 export class ProductListComponent {
   addOneProduct(item: IBook) {
-    return this.productService.addProductP(item);
+    return this.productService.addProduct(item);
   }
   products: Array<IBook> = []; // Model -> View
   isLoading: boolean = true;
   msg = '';
 
-  constructor(public productService: ProductService, private router: Router) {}
+  constructor(
+    public productService: ProductService,
+    private router: Router
+  ) // public cartService: CartService
+  {}
 
   // After Initialization of the component
   ngOnInit() {
@@ -38,4 +43,7 @@ export class ProductListComponent {
         this.msg = 'Something went wrong 🥲';
       });
   }
+  // addToCart(product: any) {
+  //   this.cartService.addToCart(product);
+  // }
 }

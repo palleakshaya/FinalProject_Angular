@@ -13,6 +13,15 @@ export interface IBook {
   stock: number;
   qty: number;
 }
+export interface User {
+  username: string;
+  password: string;
+}
+
+export interface TokenResponse {
+  msg: string;
+  token: string;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -239,6 +248,20 @@ export class ProductService {
       `https://66b0acdd6a693a95b539ba20.mockapi.io/Products/${bookId}`
     ).then((res) => res.json());
   }
+  addProduct(product: any) {
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const existingProductIndex = cart.findIndex(
+      (i: { id: any }) => product.id === i.id
+    );
+
+    if (existingProductIndex !== -1) {
+      cart[existingProductIndex].quantity += 1; // Update quantity if the product is already in the cart
+    } else {
+      product.quantity = 1; // Initialize quantity
+      cart.push(product); // Add new product to cart
+    }
+    localStorage.setItem('cart', JSON.stringify(cart)); // Save updated cart to localStorage
+  }
   addProductP(item: IBook) {
     // Check if the available quantity is greater than 0
     if (item.stock <= 0) {
@@ -248,16 +271,16 @@ export class ProductService {
 
     const existingItem = this.cart.find((i) => item.bookId === i.bookId);
     if (existingItem) {
-      existingItem.stock += 1; // Increase quantity in cart
+      existingItem.qty += 1; // Increase quantity in cart
     } else {
-      this.cart.push({ ...item, stock: 1 }); // Add new item to cart
+      this.cart.push({ ...item, qty: 1 }); // Add new item to cart
     }
   }
   removeFromCart(item: IBook) {
     const cartItem = this.cart.find((i) => i.bookId === item.bookId);
     if (cartItem) {
-      cartItem.stock -= 1; // Decrease quantity in cart
-      if (cartItem.stock === 0) {
+      cartItem.qty -= 1; // Decrease quantity in cart
+      if (cartItem.qty === 0) {
         this.cart = this.cart.filter((i) => i.bookId !== item.bookId); // Remove item from cart if qty is 0
       }
     }
@@ -309,8 +332,24 @@ export class ProductService {
   }
 
   async getOrdersP(): Promise<IBook[]> {
-    return await fetch(
-      'https://66b0acdd6a693a95b539ba20.mockapi.io/Orders'
-    ).then((res) => res.json());
+    return await fetch(`https://66b0acdd6a693a95b539ba20.mockapi.io/Orders/1`, {
+      headers: {
+        'Content-Type': 'application/json',
+        // 'token': ''
+      },
+    }).then((res) => res.json());
+  }
+  // async login(credentials: User): Promise<TokenResponse> {
+  //   return await fetch(`${this.API}/users/login`, {
+  //     method: 'POST',
+  //     body: JSON.stringify(credentials),
+  //     headers: {
+  //       'Content-type': 'application/json',
+  //     },
+  //   }).then((res) => res.json());
+  // }
+  gettingCart() {
+    // return this.CartData;
+    return JSON.parse(localStorage.getItem('cart') || '[]');
   }
 }

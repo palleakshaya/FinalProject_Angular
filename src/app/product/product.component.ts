@@ -53,7 +53,7 @@ export class ProductComponent {
   addToCart() {
     this.addItemEvent.emit(this.product);
   }
-  // cart() {
-  //   this.productService.addProduct(this.product);
-  // }
+  cart() {
+    this.productService.addProduct(this.product);
+  }
 }
